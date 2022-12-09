@@ -53,7 +53,7 @@ export default class LiveMpegTsVideo extends BaseVideo {
      */
     protected initVideoSetting(): void {
         // 対応しているか確認
-        if (Mpegts.isSupported() === false || Mpegts.getFeatureList().mseLivePlayback === false) {
+        if (!Mpegts.isSupported() || !Mpegts.getFeatureList().mseLivePlayback) {
             this.snackbarState.open({
                 color: 'error',
                 text: '非対応ブラウザーです。',
@@ -134,16 +134,12 @@ export default class LiveMpegTsVideo extends BaseVideo {
      * https://github.com/l3tnun/EPGStation/commit/352bf9a69fdd0848295afb91859e1a402b623212#commitcomment-50407815
      */
     private parseMalformedPES(data: any): any {
-        let pes_scrambling_control = (data[0] & 0x30) >>> 4;
-        let pts_dts_flags = (data[1] & 0xc0) >>> 6;
         let pes_header_data_length = data[2];
 
         let payload_start_index = 3 + pes_header_data_length;
         let payload_length = data.byteLength - payload_start_index;
 
-        let payload = data.subarray(payload_start_index, payload_start_index + payload_length);
-
-        return payload;
+        return data.subarray(payload_start_index, payload_start_index + payload_length);
     }
 
     /**

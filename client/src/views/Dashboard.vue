@@ -208,7 +208,7 @@ class Dashboard extends Vue {
 
         this.isShow = false;
 
-        if (UaUtil.isiOS() === true) {
+        if (UaUtil.isiOS()) {
             this.removeFixAddressBarClass();
         }
 

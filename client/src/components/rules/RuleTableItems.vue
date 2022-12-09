@@ -16,7 +16,7 @@
                 <tbody>
                     <tr v-for="item in items" v-bind:key="item.display.id" v-bind:class="{ 'selected-color': item.isSelected === true }" v-on:click="selectItem(item)">
                         <td class="toggle">
-                            <v-switch v-if="isEditMode === false" v-model="item.display.isEnable" hide-details dense value v-on:change="changeState(item)"></v-switch>
+                            <v-switch v-if="isEditMode === false" v-model="item.display.isEnable" hide-details dense value="" v-on:change="changeState(item)"></v-switch>
                         </td>
                         <td>{{ item.display.keyword }}</td>
                         <td>{{ item.display.ignoreKeyword }}</td>
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import RuleItemMenu from '@/components/rules/RuleItemMenu.vue';
-import { RuleStateData, RuleStateDisplayData } from '@/model/state/rule/IRuleState';
+import { RuleStateData } from '@/model/state/rule/IRuleState';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component({
@@ -61,7 +61,7 @@ export default class RuleTableItem extends Vue {
      * item 選択
      */
     public selectItem(item: RuleStateData): void {
-        if (this.isEditMode === false) {
+        if (!this.isEditMode) {
             return;
         }
 

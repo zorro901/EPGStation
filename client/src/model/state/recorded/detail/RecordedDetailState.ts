@@ -63,7 +63,7 @@ export default class RecordedDetailState implements IRecordedDetailState {
             if (settingURLScheme !== null && settingURLScheme.length > 0) {
                 urlScheme = settingURLScheme;
             } else if (this.config !== null) {
-                if (UaUtil.isiOS() === true && typeof this.config.urlscheme.video.ios !== 'undefined') {
+                if (UaUtil.isiOS() && typeof this.config.urlscheme.video.ios !== 'undefined') {
                     urlScheme = this.config.urlscheme.video.ios;
                 } else if (UaUtil.isAndroid() === true && typeof this.config.urlscheme.video.android !== 'undefined') {
                     urlScheme = this.config.urlscheme.video.android;
@@ -113,7 +113,7 @@ export default class RecordedDetailState implements IRecordedDetailState {
             if (settingURLScheme !== null && settingURLScheme.length > 0) {
                 urlScheme = settingURLScheme;
             } else if (this.config !== null) {
-                if (UaUtil.isiOS() === true && typeof this.config.urlscheme.download.ios !== 'undefined') {
+                if (UaUtil.isiOS() && typeof this.config.urlscheme.download.ios !== 'undefined') {
                     urlScheme = this.config.urlscheme.download.ios;
                 } else if (UaUtil.isAndroid() === true && typeof this.config.urlscheme.download.android !== 'undefined') {
                     urlScheme = this.config.urlscheme.download.android;

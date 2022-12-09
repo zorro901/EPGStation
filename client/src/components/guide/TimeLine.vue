@@ -33,13 +33,6 @@ export default class TimeScale extends Vue {
     private getTimerNum(): number {
         return (60 - new Date().getSeconds()) * 1000;
     }
-
-    public destroyed(): void {
-        if (this.timerId !== null) {
-            clearTimeout(this.timerId);
-        }
-    }
-
     /**
      * 時刻線位置を更新する
      */

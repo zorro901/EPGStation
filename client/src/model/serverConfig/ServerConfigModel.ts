@@ -27,7 +27,7 @@ export default class ServerConfigModel implements IServerConfigModel {
      * iOS で再生できないストリーミングの設定を削除する
      */
     private setStreamingSettingForiOS(): void {
-        if (UaUtil.isiOS() === false || this.config === null || typeof this.config.streamConfig === 'undefined') {
+        if (!UaUtil.isiOS() || this.config === null || typeof this.config.streamConfig === 'undefined') {
             return;
         }
 
@@ -37,7 +37,7 @@ export default class ServerConfigModel implements IServerConfigModel {
                 delete this.config.streamConfig.live.ts.webm;
                 delete this.config.streamConfig.live.ts.mp4;
 
-                if (UaUtil.isiOS() === true && UaUtil.isiPadOS() === false) {
+                if (UaUtil.isiOS() && !UaUtil.isiPadOS()) {
                     // ios では mpegts.js 用設定を削除する
                     delete this.config.streamConfig.live.ts.m2tsll;
                 }

@@ -112,7 +112,7 @@
             </div>
             <div class="video-wrap">
                 <NormalVideo
-                    v-if="videoParam.type == 'Normal'"
+                    v-if="videoParam.type === 'Normal'"
                     ref="video"
                     v-bind:videoSrc.sync="videoParam.src"
                     v-on:timeupdate="onTimeupdate"
@@ -126,7 +126,7 @@
                     v-on:volumechange="onVolumechange"
                 ></NormalVideo>
                 <LiveHLSVideo
-                    v-if="videoParam.type == 'LiveHLS'"
+                    v-if="videoParam.type === 'LiveHLS'"
                     ref="video"
                     v-bind:channelId="videoParam.channelId"
                     v-bind:mode="videoParam.mode"
@@ -141,7 +141,7 @@
                     v-on:volumechange="onVolumechange"
                 ></LiveHLSVideo>
                 <RecordedStreamingVideo
-                    v-if="videoParam.type == 'RecordedStreaming'"
+                    v-if="videoParam.type === 'RecordedStreaming'"
                     ref="video"
                     v-bind:recordedId="videoParam.recordedId"
                     v-bind:videoFileId="videoParam.videoFileId"
@@ -158,7 +158,7 @@
                     v-on:volumechange="onVolumechange"
                 ></RecordedStreamingVideo>
                 <RecordedHLSStreamingVideo
-                    v-if="videoParam.type == 'RecordedHLS'"
+                    v-if="videoParam.type === 'RecordedHLS'"
                     ref="video"
                     v-bind:recordedId="videoParam.recordedId"
                     v-bind:videoFileId="videoParam.videoFileId"
@@ -174,7 +174,7 @@
                     v-on:volumechange="onVolumechange"
                 ></RecordedHLSStreamingVideo>
                 <LiveMpegTsVideo
-                    v-if="videoParam.type == 'LiveMpegTs'"
+                    v-if="videoParam.type === 'LiveMpegTs'"
                     ref="video"
                     v-bind:videoSrc.sync="videoParam.src"
                     v-on:timeupdate="onTimeupdate"
@@ -205,12 +205,6 @@ import UaUtil from '@/util/UaUtil';
 import Util from '@/util/Util';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { IVideoPlayerSettingModel } from '@/model/storage/video/IVideoPlayerSettingModel';
-
-interface SpeedItem {
-    text: string;
-    value: number;
-}
-
 @Component({
     components: {
         NormalVideo,
@@ -231,12 +225,11 @@ export default class VideoContainer extends Vue {
     public currentTime: number = 0; // 動画再生位置 (秒)
     public duration: number = 0; // 動画終了長さ (秒)
     public volume: number = 1.0;
-    public speed: number = 1.0;
     public isLoading: boolean = true;
     public isPause: boolean = true; // play ボタン用
     public isShowControl: boolean = false;
     public isHideAudioVolume: boolean = UaUtil.isMobile() || UaUtil.isiPadOS();
-    public isEnabledPip: boolean = !!(document as any).pictureInPictureEnabled;
+    public isEnabledPip: boolean = (document as any).pictureInPictureEnabled;
     public isFullscreen: boolean = this.checkFullscreen();
     public currentTimeStr: string = '--:--';
     public durationStr: string = '--:--';
@@ -299,7 +292,7 @@ export default class VideoContainer extends Vue {
             await this.togglePlay();
 
             if (typeof this.$refs.video !== 'undefined') {
-                if ((this.$refs.video as BaseVideo).paused() === true) {
+                if ((this.$refs.video as BaseVideo).paused()) {
                     this.isShowControl = true;
                     this.isHideCursor = false;
                 } else {
@@ -318,7 +311,7 @@ export default class VideoContainer extends Vue {
 
         // switch fullscreen
         if (event.key === 'f') {
-            this.switchFullScreen();
+            await this.switchFullScreen();
         }
 
         if (this.duration > 0) {
@@ -358,7 +351,7 @@ export default class VideoContainer extends Vue {
      * mousemove 処理
      */
     public mousemove(e: MouseEvent): void {
-        if (UaUtil.isAndroid() === true || typeof this.$refs.video === 'undefined' || (this.$refs.video as BaseVideo).paused() === true) {
+        if (UaUtil.isAndroid() || typeof this.$refs.video === 'undefined' || (this.$refs.video as BaseVideo).paused()) {
             return;
         }
 
@@ -380,12 +373,7 @@ export default class VideoContainer extends Vue {
      */
     private mouseleave(): void {
         //  再生中でない or 最後に slider を seek させてから 50ms 以上経過していない場合は無視する
-        if (
-            UaUtil.isAndroid() === true ||
-            typeof this.$refs.video === 'undefined' ||
-            (this.$refs.video as BaseVideo).paused() === true ||
-            new Date().getTime() - this.lastSeekedTime < 50
-        ) {
+        if (UaUtil.isAndroid() || typeof this.$refs.video === 'undefined' || (this.$refs.video as BaseVideo).paused() || new Date().getTime() - this.lastSeekedTime < 50) {
             return;
         }
 
@@ -395,8 +383,7 @@ export default class VideoContainer extends Vue {
 
     // 時刻更新
     public onTimeupdate(): void {
-        const duration = this.getVideoDuration();
-        this.duration = duration;
+        this.duration = this.getVideoDuration();
         this.currentTime = this.getVideoCurrentTime();
         this.updateTimeStr();
         this.updateSubtitleState();
@@ -477,13 +464,13 @@ export default class VideoContainer extends Vue {
     public onCanplay(): void {
         this.isLoading = false;
 
-        if (typeof this.$refs.video !== 'undefined' && (this.$refs.video as BaseVideo).paused() === true && new Date().getTime() - this.lastSeekedTime > 1000) {
+        if (typeof this.$refs.video !== 'undefined' && (this.$refs.video as BaseVideo).paused() && new Date().getTime() - this.lastSeekedTime > 1000) {
             this.isShowControl = true;
             this.isHideCursor = false;
         }
 
         setTimeout(() => {
-            if (this.isFirstPlay === true && typeof this.$refs.video !== 'undefined' && (this.$refs.video as BaseVideo).paused() === false) {
+            if (this.isFirstPlay && typeof this.$refs.video !== 'undefined' && !(this.$refs.video as BaseVideo).paused()) {
                 this.isShowControl = false;
                 this.isHideCursor = true;
 
@@ -491,7 +478,7 @@ export default class VideoContainer extends Vue {
                 const isShowingSubtitle = this.internalSubtitleState === 'showing';
                 const subtitleConfig = this.videoSetting.getSavedValue().isShowSubtitle;
                 if (subtitleConfig !== isShowingSubtitle) {
-                    this.internalSubtitleState = subtitleConfig === true ? 'showing' : 'disabled';
+                    this.internalSubtitleState = subtitleConfig ? 'showing' : 'disabled';
                     this.forceUpdateSubtitle();
                 }
             }
@@ -530,7 +517,7 @@ export default class VideoContainer extends Vue {
         }
 
         // 後で再生状態を戻すために保存
-        if ((this.$refs.video as BaseVideo).paused() === false) {
+        if (!(this.$refs.video as BaseVideo).paused()) {
             // 再生中なら再生停止
             (this.$refs.video as BaseVideo).pause();
             this.needsReplay = true;
@@ -608,10 +595,10 @@ export default class VideoContainer extends Vue {
             return;
         }
 
-        if (this.isShowControl === false) {
+        if (!this.isShowControl) {
             clearTimeout(this.hideControlTimer);
             this.isHideCursor = false;
-        } else if (typeof this.$refs.video !== 'undefined' && (this.$refs.video as BaseVideo).paused() === false) {
+        } else if (typeof this.$refs.video !== 'undefined' && !(this.$refs.video as BaseVideo).paused()) {
             this.isHideCursor = true;
         }
         this.isShowControl = !this.isShowControl;
@@ -623,7 +610,7 @@ export default class VideoContainer extends Vue {
             return;
         }
 
-        if ((this.$refs.video as BaseVideo).paused() === true) {
+        if ((this.$refs.video as BaseVideo).paused()) {
             await (this.$refs.video as BaseVideo).play().catch(err => {
                 console.error(err);
             });
@@ -759,7 +746,7 @@ export default class VideoContainer extends Vue {
             return;
         }
 
-        if ((this.$refs.video as BaseVideo).isShowingSubtitle() === true) {
+        if ((this.$refs.video as BaseVideo).isShowingSubtitle()) {
             // 非表示
             this.internalSubtitleState = 'disabled';
             (this.$refs.video as BaseVideo).disabledSubtitle();
@@ -781,10 +768,10 @@ export default class VideoContainer extends Vue {
             return;
         }
 
-        if (this.isFullscreen === true) {
+        if (this.isFullscreen) {
             // フルスクリーン終了
             if (document.exitFullscreen) {
-                document.exitFullscreen();
+                await document.exitFullscreen();
             } else if ((document as any).mozCancelFullScreen) {
                 (document as any).mozCancelFullScreen();
             } else if ((document as any).webkitCancelFullScreen) {
@@ -794,12 +781,12 @@ export default class VideoContainer extends Vue {
             }
         } else {
             // フルスクリーンへ切り替え
-            if (this.requestFullscreen(this.$refs.container as HTMLElement) === false && typeof this.$refs.video !== 'undefined') {
+            if (!this.requestFullscreen(this.$refs.container as HTMLElement) && typeof this.$refs.video !== 'undefined') {
                 (this.$refs.video as BaseVideo).requestFullscreen();
             }
 
             // 画面回転
-            if (this.isLandscape() === false) {
+            if (!this.isLandscape()) {
                 await this.switchRotation();
             }
         }
@@ -840,7 +827,7 @@ export default class VideoContainer extends Vue {
      * full screen 時の画面回転状態を変更
      */
     private async switchRotation(): Promise<void> {
-        if (this.isEnabledRotation === false) {
+        if (!this.isEnabledRotation) {
             return;
         }
 
@@ -900,7 +887,7 @@ export default class VideoContainer extends Vue {
         padding-top: 56.25%
 
     .add-shadow
-        text-shadow: 0px 0px 10px black
+        text-shadow: 0 0 10px black
 
     .video-content
         position: absolute

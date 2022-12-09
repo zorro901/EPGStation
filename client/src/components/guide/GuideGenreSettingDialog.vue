@@ -71,9 +71,9 @@ export default class GuideGenreSettingDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === true && oldState === false) {
+        if (newState && !oldState) {
             this.initItem();
-        } else if (newState === false && oldState === true) {
+        } else if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

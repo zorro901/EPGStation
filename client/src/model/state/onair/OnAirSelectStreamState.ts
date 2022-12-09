@@ -174,7 +174,7 @@ export default class OnAirSelectStreamState implements IOnAirSelectStreamState {
         if (settingURLScheme !== null && settingURLScheme.length > 0) {
             urlScheme = settingURLScheme;
         } else if (config !== null) {
-            if (UaUtil.isiOS() === true && typeof config.urlscheme.m2ts.ios !== 'undefined') {
+            if (UaUtil.isiOS() && typeof config.urlscheme.m2ts.ios !== 'undefined') {
                 urlScheme = config.urlscheme.m2ts.ios;
             } else if (UaUtil.isAndroid() === true && typeof config.urlscheme.m2ts.android !== 'undefined') {
                 urlScheme = config.urlscheme.m2ts.android;

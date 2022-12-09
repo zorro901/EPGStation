@@ -36,7 +36,7 @@ export default class NavigationState implements INavigationState {
 
         const config = this.serverConfig.getConfig();
 
-        if (config !== null && config.isEnableTSLiveStream === true) {
+        if (config !== null && config.isEnableTSLiveStream) {
             newItems.push({
                 icon: 'mdi-television-play',
                 title: '放映中',
@@ -46,18 +46,18 @@ export default class NavigationState implements INavigationState {
             });
         }
 
-        if (this.setting.getSavedValue().isEnableDisplayForEachBroadcastWave === true && config !== null) {
+        if (this.setting.getSavedValue().isEnableDisplayForEachBroadcastWave && config !== null) {
             const types: string[] = [];
-            if (config.broadcast.GR === true) {
+            if (config.broadcast.GR) {
                 types.push('GR');
             }
-            if (config.broadcast.BS === true) {
+            if (config.broadcast.BS) {
                 types.push('BS');
             }
-            if (config.broadcast.CS === true) {
+            if (config.broadcast.CS) {
                 types.push('CS');
             }
-            if (config.broadcast.SKY === true) {
+            if (config.broadcast.SKY) {
                 types.push('SKY');
             }
 

@@ -23,7 +23,7 @@
                         ></v-select>
                     </div>
                     <div class="d-flex">
-                        <v-switch value v-model="dialogState.useURLScheme" v-on:change="updateAllStreamConfig"></v-switch>
+                        <v-switch value="" v-model="dialogState.useURLScheme" v-on:change="updateAllStreamConfig"></v-switch>
                         <v-list-item-title class="subtitle-1">外部アプリで開く</v-list-item-title>
                     </div>
                 </div>
@@ -119,7 +119,7 @@ export default class OnAirSelectStream extends Vue {
             this.m2tsViewOnURLScheme();
         } else if (this.dialogState.selectedStreamType === 'M2TS-LL') {
             // 再生に対応しているか?
-            if (Mpegts.isSupported() === false || Mpegts.getFeatureList().mseLivePlayback === false) {
+            if (!Mpegts.isSupported() || !Mpegts.getFeatureList().mseLivePlayback) {
                 this.snackbarState.open({
                     color: 'error',
                     text: '再生に対応していません',
@@ -128,7 +128,7 @@ export default class OnAirSelectStream extends Vue {
                 return;
             }
 
-            await this.m2tsLLView().catch(err => {
+            await this.m2tsLLView().catch(() => {
                 this.snackbarState.open({
                     color: 'error',
                     text: '視聴ページへの移動に失敗',
@@ -146,7 +146,7 @@ export default class OnAirSelectStream extends Vue {
                         channel: channel.id.toString(10),
                         mode: this.dialogState.selectedStreamConfig.toString(10),
                     },
-                }).catch(err => {
+                }).catch(() => {
                     this.snackbarState.open({
                         color: 'error',
                         text: '視聴ページへの移動に失敗',
@@ -192,7 +192,7 @@ export default class OnAirSelectStream extends Vue {
                     channel: channel.id.toString(10),
                     mode: this.dialogState.selectedStreamConfig.toString(10),
                 },
-            }).catch(err => {
+            }).catch(() => {
                 this.snackbarState.open({
                     color: 'error',
                     text: '視聴ページへの移動に失敗',
@@ -206,7 +206,7 @@ export default class OnAirSelectStream extends Vue {
      */
     @Watch('dialogState.isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

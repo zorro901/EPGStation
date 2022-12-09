@@ -130,7 +130,7 @@ export default class AddEncodeState implements IAddEncodeState {
             removeOriginal: this.setting.tmp.removeOriginal,
         };
 
-        if (this.setting.tmp.isSaveSameDirectory === true) {
+        if (this.setting.tmp.isSaveSameDirectory) {
             option.isSaveSameDirectory = true;
         } else {
             if (this.parentDirectory === null) {

@@ -20,7 +20,6 @@ import { RuleStateData } from '@/model/state/rule/IRuleState';
 import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
 import Util from '@/util/Util';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import * as apid from '../../../../api';
 
 @Component({})
 export default class RuleDeleteDialog extends Vue {
@@ -48,7 +47,7 @@ export default class RuleDeleteDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

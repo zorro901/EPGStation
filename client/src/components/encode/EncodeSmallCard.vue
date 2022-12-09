@@ -28,7 +28,6 @@
 import EncodeCancelDialog from '@/components/encode/EncodeCancelDialog.vue';
 import { EncodeInfoDisplayItem } from '@/model/state/encode/IEncodeState';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import * as apid from '../../../../api';
 
 @Component({
     components: {
@@ -49,7 +48,7 @@ export default class EncodeSmallCard extends Vue {
     }
 
     public clickItem(): void {
-        if (this.isEditMode === false) {
+        if (!this.isEditMode) {
             return;
         }
 

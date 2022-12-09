@@ -113,7 +113,7 @@ export default class Guide extends Vue {
 
     get darkClassList(): any {
         return {
-            'is-dark': this.settingValue?.isForceDisableDarkThemeForGuide !== true && this.$vuetify.theme.dark === true,
+            'is-dark': this.settingValue?.isForceDisableDarkThemeForGuide !== true && this.$vuetify.theme.dark,
         };
     }
 
@@ -141,7 +141,7 @@ export default class Guide extends Vue {
         // socket.io イベント
         this.socketIoModel.onUpdateState(this.onUpdateStatusCallback);
 
-        if (UaUtil.isiOS() === true) {
+        if (UaUtil.isiOS()) {
             // html の class に guide を追加
             const element = document.getElementsByTagName('html')[0];
             element.classList.add('fix-address-bar');
@@ -155,7 +155,7 @@ export default class Guide extends Vue {
         // socket.io イベント
         this.socketIoModel.offUpdateState(this.onUpdateStatusCallback);
 
-        if (UaUtil.isiOS() === true) {
+        if (UaUtil.isiOS()) {
             // html の class から guide を削除
             const element = document.getElementsByTagName('html')[0];
             element.classList.remove('fix-address-bar');

@@ -70,7 +70,7 @@ export default class ReservesState implements IReservesState {
 
         let selectedCnt = 0;
         for (const r of this.reserves) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 selectedCnt++;
             }
         }
@@ -145,7 +145,7 @@ export default class ReservesState implements IReservesState {
         // 削除する video file を列挙する
         const reserveIds: apid.ReserveId[] = [];
         for (const r of this.reserves) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 reserveIds.push(r.reserveItem.id);
             }
         }

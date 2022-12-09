@@ -17,7 +17,7 @@ export default class PWAConfigModel implements IPWAConfigModel {
         const head = document.getElementsByTagName('head')[0];
 
         // PWA 設定が無効か?
-        if (this.settingModel.getSavedValue().isEnablePWA === false) {
+        if (!this.settingModel.getSavedValue().isEnablePWA) {
             // manifest 削除
             const links = head.getElementsByTagName('link');
             for (let i = 0; i < links.length; i++) {

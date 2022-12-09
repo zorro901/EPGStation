@@ -68,17 +68,17 @@ export default class ReserveMenu extends Vue {
     private snackbarState: ISnackbarState = container.get<ISnackbarState>('ISnackbarState');
 
     public getDeleteButtonIcon(): string {
-        return this.reserveItem.isSkip === true || this.reserveItem.isOverlap === true ? 'mdi-lock-open' : 'mdi-delete';
+        return this.reserveItem.isSkip || this.reserveItem.isOverlap ? 'mdi-lock-open' : 'mdi-delete';
     }
 
     public getDeleteMenuText(): string {
-        return this.reserveItem.isSkip === true || this.reserveItem.isOverlap === true ? 'unlock' : 'delete';
+        return this.reserveItem.isSkip || this.reserveItem.isOverlap ? 'unlock' : 'delete';
     }
 
     public async onClickDelete(): Promise<void> {
         await Util.sleep(300);
 
-        if (this.reserveItem.isSkip === true) {
+        if (this.reserveItem.isSkip) {
             // remove skip
             try {
                 await this.reserveApiModel.removeSkip(this.reserveItem.id);
@@ -92,7 +92,7 @@ export default class ReserveMenu extends Vue {
                     text: `${this.reserveItem.name} 除外解除失敗`,
                 });
             }
-        } else if (this.reserveItem.isOverlap === true) {
+        } else if (this.reserveItem.isOverlap) {
             // remove overlap
             try {
                 await this.reserveApiModel.removeOverlap(this.reserveItem.id);

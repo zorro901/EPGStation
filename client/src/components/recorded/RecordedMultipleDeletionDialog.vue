@@ -80,7 +80,7 @@ export default class RecordedMultipleDeletionDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === true && !!oldState === false) {
+        if (newState && !oldState) {
             if (this.total === 0) {
                 this.dialogModel = false;
                 this.snackbarState.open({
@@ -88,7 +88,7 @@ export default class RecordedMultipleDeletionDialog extends Vue {
                     text: '番組を選択してください。',
                 });
             }
-        } else if (newState === false && oldState === true) {
+        } else if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

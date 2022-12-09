@@ -13,9 +13,8 @@ export default class GuideReserveUtil implements IGuideReserveUtil {
 
     /**
      * 予約索引情報を取得
-     * @param startAt: UnixtimeMS
-     * @param endAt: UnixtimeMS
      * @return Promise<ReserveStateItemIndex>
+     * @param option
      */
     public async getReserveIndex(option: apid.GetReserveListsOption): Promise<ReserveStateItemIndex> {
         const lists = await this.reservesApiModel.getLists(option);

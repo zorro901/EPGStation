@@ -71,7 +71,7 @@ export default class ChannelModel implements IChannelModel {
             id: item.id,
             serviceId: item.serviceId,
             networkId: item.networkId,
-            name: isHalfWidth === true ? item.halfWidthName : item.name,
+            name: isHalfWidth ? item.halfWidthName : item.name,
             remoteControlKeyId: item.remoteControlKeyId,
             hasLogoData: item.hasLogoData,
             channelType: item.channelType,

@@ -85,7 +85,7 @@ export default class RecordingState implements IRecordingState {
 
         let selectedCnt = 0;
         for (const r of this.recorded) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 selectedCnt++;
             }
         }

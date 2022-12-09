@@ -26,7 +26,6 @@ import container from '@/model/ModelContainer';
 import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
 import Util from '@/util/Util';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import * as apid from '../../../../api';
 
 @Component({})
 export default class RecordedCleanupDialog extends Vue {
@@ -53,7 +52,7 @@ export default class RecordedCleanupDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);
@@ -91,7 +90,7 @@ export default class RecordedCleanupDialog extends Vue {
 
         this.dialogModel = false;
 
-        if (isSuccess === true) {
+        if (isSuccess) {
             this.snackbarState.open({
                 color: 'success',
                 text: 'クリーンアップ完了',

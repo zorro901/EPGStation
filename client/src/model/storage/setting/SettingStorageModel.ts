@@ -19,7 +19,7 @@ export default class SettingStorageModel extends AbstractStorageBaseModel<ISetti
             isOnAirTabListView: true,
             isPreferredPlayingLiveM2TSOnWeb: true,
             onAirM2TSViewURLScheme: null,
-            guideMode: UaUtil.isiOS() === true ? 'all' : 'sequential',
+            guideMode: UaUtil.isiOS() ? 'all' : 'sequential',
             guideLength: 24,
             isForceDisableDarkThemeForGuide: false,
             isShowOnlyFreePrograms: false,

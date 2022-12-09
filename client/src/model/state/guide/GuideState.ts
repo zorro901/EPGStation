@@ -113,7 +113,7 @@ class GuideState implements IGuideState {
                 scheduleOption[option.type] = true;
             }
 
-            if (this.settingModel.getSavedValue().isShowOnlyFreePrograms === true) {
+            if (this.settingModel.getSavedValue().isShowOnlyFreePrograms) {
                 scheduleOption.isFree = true;
             }
 
@@ -131,7 +131,7 @@ class GuideState implements IGuideState {
                 channelId: option.channelId,
             };
 
-            if (this.settingModel.getSavedValue().isShowOnlyFreePrograms === true) {
+            if (this.settingModel.getSavedValue().isShowOnlyFreePrograms) {
                 scheduleOption.isFree = true;
             }
 
@@ -163,7 +163,7 @@ class GuideState implements IGuideState {
         this.programDoms = [];
         this.programDomIndex = {};
         let baseStartAt = this.startAt;
-        let baseEndAt = isSingleStation === true ? baseStartAt + 60 * 60 * GuideState.SINGLE_STATION_LENGTH * 1000 : this.endAt;
+        let baseEndAt = isSingleStation ? baseStartAt + 60 * 60 * GuideState.SINGLE_STATION_LENGTH * 1000 : this.endAt;
         for (let i = 0; i < this.schedules.length; i++) {
             for (const program of this.schedules[i].programs) {
                 const programStartAt = baseStartAt > program.startAt ? baseStartAt : program.startAt;
@@ -204,7 +204,7 @@ class GuideState implements IGuideState {
                 this.programDomIndex[program.id].push(element);
             }
 
-            if (isSingleStation === true) {
+            if (isSingleStation) {
                 baseStartAt += 60 * 60 * GuideState.SINGLE_STATION_LENGTH * 1000;
                 baseEndAt = baseStartAt + 60 * 60 * GuideState.SINGLE_STATION_LENGTH * 1000;
             }
@@ -214,7 +214,7 @@ class GuideState implements IGuideState {
     /**
      * 番組表 DOM 生成
      * @param option: CreateProgramDomOption
-     * @param isHidden: boolean
+     * @param genreSettings
      * @return HTMLElement
      */
     private createProgramDom(option: CreateProgramDomOption, genreSettings: IGuideGenreSettingValue): HTMLElement {
@@ -252,11 +252,11 @@ class GuideState implements IGuideState {
             classStr += ` ${reserve.type}`;
         }
 
-        if (option.isHidden === true) {
+        if (option.isHidden) {
             classStr += ' hidden';
         }
 
-        const element = this.createParentElement(
+        return this.createParentElement(
             'div',
             {
                 class: classStr,
@@ -264,7 +264,7 @@ class GuideState implements IGuideState {
                     `height: calc(${option.height} * (var(--timescale-height) / 60));` +
                     `top: calc(${option.top} * (var(--timescale-height) / 60)); ` +
                     `left: calc(${option.left} * (var(--channel-width)));`,
-                onclick: (e: Event) => {
+                onclick: () => {
                     const dialogOption: ProgramDialogOpenOption = {
                         channel: option.channel,
                         program: option.program,
@@ -283,8 +283,6 @@ class GuideState implements IGuideState {
             },
             child,
         );
-
-        return element;
     }
 
     /**
@@ -342,7 +340,7 @@ class GuideState implements IGuideState {
         const topStart = this.displayRange.offsetHeight;
         const topEnd = this.displayRange.offsetHeight + this.displayRange.maxHeight;
         for (const dom of this.programDoms) {
-            if (guideMode === 'sequential' && dom.isVisible === true) {
+            if (guideMode === 'sequential' && dom.isVisible) {
                 continue;
             }
             let isVisible = true;
@@ -425,7 +423,7 @@ class GuideState implements IGuideState {
         this.reserveIndex = newReserveIndex;
 
         // 番組ダイアログを開いている場合は予約情報を更新する
-        if (this.programDialogState.isOpen === true) {
+        if (this.programDialogState.isOpen) {
             const programId = this.programDialogState.getProgramId();
             if (programId !== null) {
                 this.programDialogState.updateReserve(
@@ -509,7 +507,7 @@ class GuideState implements IGuideState {
         }
 
         const start = parseInt(this.startTime.substr(6, 2), 10);
-        if (isNaN(start) === true) {
+        if (isNaN(start)) {
             return [];
         }
 

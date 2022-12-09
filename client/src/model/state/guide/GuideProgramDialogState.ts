@@ -1,7 +1,7 @@
 import { IGuideProgramDialogSettingStorageModel, NONE_ENCODE_OPTION } from '@/model/storage/guide/IGuideProgramDialogSettingStorageModel';
 import { inject, injectable } from 'inversify';
 import * as apid from '../../../../../api';
-import { AudioComponentType, AudioSamplingRate, VideoComponentType } from '../../../lib/event';
+import { AudioComponentType, AudioSamplingRate, VideoComponentType } from '@/lib/event';
 import DateUtil from '../../../util/DateUtil';
 import GenreUtil from '../../../util/GenreUtil';
 import IReservesApiModel from '../../api/reserves/IReservesApiModel';

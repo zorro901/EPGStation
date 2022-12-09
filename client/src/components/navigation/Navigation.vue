@@ -39,12 +39,10 @@
 
 <script lang="ts">
 import container from '@/model/ModelContainer';
-import IServerConfigModel from '@/model/serverConfig/IServerConfigModel';
 import INavigationState from '@/model/state/navigation/INavigationState';
 import ISocketIOModel from '@/model/socketio/ISocketIOModel';
 import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
 import IVersionState from '@/model/state/version/IVersionState';
-import { ISettingStorageModel, ISettingValue } from '@/model/storage/setting/ISettingStorageModel';
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { Location } from 'vue-router';
 import Util from '../../util/Util';
@@ -58,9 +56,6 @@ interface NavigationItem {
 @Component({})
 export default class Navigation extends Vue {
     public navigationState: INavigationState = container.get<INavigationState>('INavigationState');
-
-    private serverConfig: IServerConfigModel = container.get<IServerConfigModel>('IServerConfigModel');
-    private setting: ISettingStorageModel = container.get<ISettingStorageModel>('ISettingStorageModel');
     private socketIoModel: ISocketIOModel = container.get<ISocketIOModel>('ISocketIOModel');
     private snackbarState: ISnackbarState = container.get<ISnackbarState>('ISnackbarState');
     private versionState: IVersionState = container.get<IVersionState>('IVersionState');

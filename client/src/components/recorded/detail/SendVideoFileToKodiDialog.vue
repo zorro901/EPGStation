@@ -77,10 +77,10 @@ export default class SendVideoFileToKodiDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === true && !!oldState === false) {
+        if (newState && !oldState) {
             const settingValue = this.setting.getSavedValue();
             this.dialogState.init(settingValue.hostName);
-        } else if (newState === false && oldState === true) {
+        } else if (!newState && oldState) {
             // close
             this.setting.tmp.hostName = this.dialogState.hostName;
             this.setting.save();

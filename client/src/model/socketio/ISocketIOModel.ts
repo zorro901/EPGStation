@@ -1,7 +1,4 @@
 import * as socketIo from 'socket.io-client';
-
-export const UPDATE_EVENT = 'updateStatus';
-
 export default interface ISocketIOModel {
     Iinitialize(): void;
     getIO(): socketIo.Socket | null;

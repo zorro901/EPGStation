@@ -98,7 +98,7 @@ export default class RecordedState implements IRecordedState {
         let selectedCnt = 0;
         let selectedSize = 0;
         for (const r of this.recorded) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 selectedCnt++;
                 if (typeof r.recordedItem.videoFiles !== 'undefined') {
                     for (const v of r.recordedItem.videoFiles) {

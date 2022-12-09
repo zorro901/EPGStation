@@ -16,7 +16,6 @@
 </template>
 
 <script lang="ts">
-import container from '@/model/ModelContainer';
 import UaUtil from '@/util/UaUtil';
 import Util from '@/util/Util';
 import { cloneDeep, debounce } from 'lodash';
@@ -75,8 +74,8 @@ class Popover extends Vue {
     }
 
     @Watch('isOpen', { immediate: false, deep: false })
-    public onStateChange(value: boolean): void {
-        if (this.isOpen === false) {
+    public onStateChange(): void {
+        if (!this.isOpen) {
             this.close();
 
             return;
@@ -108,7 +107,7 @@ class Popover extends Vue {
                 // 要素を表示 (アニメーション付き)
                 this.$set(this.popoverWrapClass, 'is-showing', true);
 
-                if (UaUtil.isiOS() === true) {
+                if (UaUtil.isiOS()) {
                     const html = document.getElementsByTagName('HTML')[0];
                     html.classList.add('freeze');
                 }
@@ -131,7 +130,7 @@ class Popover extends Vue {
     private async close(): Promise<void> {
         this.$emit('update:isOpen', false);
 
-        if (UaUtil.isiOS() === true) {
+        if (UaUtil.isiOS()) {
             const html = document.getElementsByTagName('HTML')[0];
             html.classList.remove('freeze');
         }
@@ -159,8 +158,8 @@ class Popover extends Vue {
         const contentWidth = content.offsetWidth;
         const contentHeight = content.offsetHeight;
 
-        let x = 0;
-        let y = 0;
+        let x: number;
+        let y: number;
 
         // top
         x = window.innerWidth - Popover.offset * 2 < contentWidth ? window.innerWidth - Popover.offset * 2 : contentWidth;
@@ -198,7 +197,7 @@ class Popover extends Vue {
             rightArea = 0;
         }
 
-        if (!!this.isHorizontal === true || (!!this.isVertical === false && window.innerWidth - position.x < 25)) {
+        if (!!this.isHorizontal || (!this.isVertical && window.innerWidth - position.x < 25)) {
             // 左右 only
             topArea = bottomArea = 0;
         } else if (this.isVertical === true) {
@@ -223,8 +222,8 @@ class Popover extends Vue {
      * @return ElementPosition
      */
     private getElementPosition(event: Event): ElementPosition {
-        let elmX = 0;
-        let elmY = 0;
+        let elmX: number;
+        let elmY: number;
 
         if ((event as TouchEvent).targetTouches) {
             // is mobile
@@ -285,7 +284,7 @@ class Popover extends Vue {
 
     /**
      * popover を上向きに描画する
-     * @param vent: Event
+     * @param event
      * @param content: HTMLElement
      */
     private setContentTop(event: Event, content: HTMLElement): void {
@@ -330,7 +329,7 @@ class Popover extends Vue {
 
     /**
      * popover を下向きに描画する
-     * @param vent: Event
+     * @param event
      * @param content: HTMLElement
      */
     private setContentBottom(event: Event, content: HTMLElement): void {
@@ -374,7 +373,7 @@ class Popover extends Vue {
 
     /**
      * popover を左向きに描画する
-     * @param vent: Event
+     * @param event
      * @param content: HTMLElement
      */
     private setContentLeft(event: Event, content: HTMLElement): void {
@@ -426,7 +425,7 @@ class Popover extends Vue {
 
     /**
      * popover を右向きに描画する
-     * @param vent: Event
+     * @param event
      * @param content: HTMLElement
      */
     private setContentRight(event: Event, content: HTMLElement): void {
@@ -478,7 +477,7 @@ class Popover extends Vue {
 
     /**
      * 矢印の style を設定
-     * @param top, bottom, left, right
+     * @param name
      * @param x
      * @param y
      */

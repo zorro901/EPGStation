@@ -4,8 +4,7 @@
 
 <script lang="ts">
 import BaseVideo from '@/components/video/BaseVideo';
-import UaUtil from '@/util/UaUtil';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 
 @Component({})
 export default class NormalVideo extends BaseVideo {

@@ -69,7 +69,7 @@ export default class ReservesTableItems extends Vue {
     public dialogReserve: ReserveStateData | null = null;
 
     public clickItem(reserve: ReserveStateData): void {
-        if (this.isEditMode === true) {
+        if (this.isEditMode) {
             this.$emit('selected', reserve.reserveItem.id);
 
             return;

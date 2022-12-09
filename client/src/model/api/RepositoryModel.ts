@@ -35,7 +35,6 @@ class RepositoryModel implements IRepositoryModel {
 
     /**
      * get リクエスト
-     * @param type: MethodType
      * @param url: string
      * @param config?: AxiosRequestConfig | undefined
      * @return Promise<AxiosResponse<any>>
@@ -50,7 +49,6 @@ class RepositoryModel implements IRepositoryModel {
 
     /**
      * get リクエスト (テキスト)
-     * @param type: MethodType
      * @param url: string
      * @param config?: AxiosRequestConfig | undefined
      * @return Promise<AxiosResponse<any>>
@@ -65,7 +63,6 @@ class RepositoryModel implements IRepositoryModel {
 
     /**
      * delete リクエスト
-     * @param type: MethodType
      * @param url: string
      * @param config?: AxiosRequestConfig | undefined
      * @return Promise<AxiosResponse<any>>
@@ -80,8 +77,8 @@ class RepositoryModel implements IRepositoryModel {
 
     /**
      * put リクエスト
-     * @param type: MethodType
      * @param url: string
+     * @param data
      * @param config?: AxiosRequestConfig | undefined
      * @return Promise<AxiosResponse<any>>
      */
@@ -95,8 +92,8 @@ class RepositoryModel implements IRepositoryModel {
 
     /**
      * post リクエスト
-     * @param type: MethodType
      * @param url: string
+     * @param data
      * @param config?: AxiosRequestConfig | undefined
      * @return Promise<AxiosResponse<any>>
      */

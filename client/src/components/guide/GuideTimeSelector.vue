@@ -28,7 +28,6 @@
 <script lang="ts">
 import container from '@/model/ModelContainer';
 import IServerConfigModel from '@/model/serverConfig/IServerConfigModel';
-import IGuideState from '@/model/state/guide/IGuideState';
 import { ISettingStorageModel, ISettingValue } from '@/model/storage/setting/ISettingStorageModel';
 import DateUtil from '@/util/DateUtil';
 import Util from '@/util/Util';
@@ -50,8 +49,6 @@ export default class GuideTimeSelector extends Vue {
     public hourValue: string | undefined;
 
     public isOpen: boolean = false;
-
-    private guideState: IGuideState = container.get<IGuideState>('IGuideState');
     private serverConfig: IServerConfigModel = container.get<IServerConfigModel>('IServerConfigModel');
     private setting: ISettingStorageModel = container.get<ISettingStorageModel>('ISettingStorageModel');
     private settingValue: ISettingValue | null = null;
@@ -112,7 +109,7 @@ export default class GuideTimeSelector extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === true && oldState === false) {
+        if (newState && !oldState) {
             this.initValue();
         }
     }
@@ -130,17 +127,17 @@ export default class GuideTimeSelector extends Vue {
 
         // 放送波 item 設定
         this.broadcastItems = [];
-        if (this.settingValue.isEnableDisplayForEachBroadcastWave === true) {
-            if (config.broadcast.GR === true) {
+        if (this.settingValue.isEnableDisplayForEachBroadcastWave) {
+            if (config.broadcast.GR) {
                 this.broadcastItems.push('GR');
             }
-            if (config.broadcast.BS === true) {
+            if (config.broadcast.BS) {
                 this.broadcastItems.push('BS');
             }
-            if (config.broadcast.CS === true) {
+            if (config.broadcast.CS) {
                 this.broadcastItems.push('CS');
             }
-            if (config.broadcast.SKY === true) {
+            if (config.broadcast.SKY) {
                 this.broadcastItems.push('SKY');
             }
         }
@@ -163,7 +160,7 @@ export default class GuideTimeSelector extends Vue {
      * selector value 初期化
      */
     private initValue(): void {
-        if (this.settingValue !== null && this.settingValue.isEnableDisplayForEachBroadcastWave === true && typeof this.$route.query.type === 'string') {
+        if (this.settingValue !== null && this.settingValue.isEnableDisplayForEachBroadcastWave && typeof this.$route.query.type === 'string') {
             this.broadcastValue = this.$route.query.type;
         }
 

@@ -69,7 +69,7 @@ export default class RuleSearchMenu extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === true && oldState === false) {
+        if (newState && !oldState) {
             // query から値をセット
             this.keyword = typeof this.$route.query.keyword === 'string' ? this.$route.query.keyword : '';
         }

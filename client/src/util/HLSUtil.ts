@@ -9,7 +9,7 @@ namespace HLSUtil {
      * @returns boolean 対応していれば true を返す
      */
     export const isSupportedHLSjs = (): boolean => {
-        return UaUtil.isiOS() === true || (UaUtil.isMac() === true && UaUtil.isSafari() === true) ? false : Hls.isSupported();
+        return UaUtil.isiOS() || (UaUtil.isMac() === true && UaUtil.isSafari() === true) ? false : Hls.isSupported();
     };
 
     /**

@@ -1,5 +1,5 @@
 import UaUtil from '@/util/UaUtil';
-import { Component, Vue } from 'vue-property-decorator';
+import { Vue } from 'vue-property-decorator';
 
 export default abstract class BaseVide extends Vue {
     protected video: HTMLVideoElement | null = null;

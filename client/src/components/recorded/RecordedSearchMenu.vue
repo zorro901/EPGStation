@@ -51,7 +51,6 @@ import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
 import Util from '@/util/Util';
 import VuetifyUtil from '@/util/VuetifyUtil';
 import { Component, Vue, Watch } from 'vue-property-decorator';
-import * as apid from '../../../../api';
 
 @Component({})
 export default class RecordedSearchMenu extends Vue {
@@ -88,7 +87,7 @@ export default class RecordedSearchMenu extends Vue {
             if (typeof this.searchState.keyword !== 'undefined') {
                 searchQuery.keyword = this.searchState.keyword;
             }
-            if (this.isNoRule === true) {
+            if (this.isNoRule) {
                 this.searchState.ruleId = 0;
                 searchQuery.ruleId = 0;
             } else if (typeof this.searchState.ruleId !== 'undefined' && this.searchState.ruleId !== null) {
@@ -100,7 +99,7 @@ export default class RecordedSearchMenu extends Vue {
             if (typeof this.searchState.genre !== 'undefined') {
                 searchQuery.genre = this.searchState.genre;
             }
-            if (this.searchState.hasOriginalFile === true) {
+            if (this.searchState.hasOriginalFile) {
                 searchQuery.hasOriginalFile = true;
             }
 
@@ -136,7 +135,7 @@ export default class RecordedSearchMenu extends Vue {
 
     private setRuleId(): void {
         const ruleId = typeof this.$route.query.ruleId === 'undefined' ? null : parseInt(this.$route.query.ruleId as string, 10);
-        this.searchState.ruleId = ruleId === null || isNaN(ruleId) === false ? ruleId : null;
+        this.searchState.ruleId = ruleId === null || !isNaN(ruleId) ? ruleId : null;
         if (this.searchState.ruleId === 0) {
             this.isNoRule = true;
         }
@@ -144,7 +143,7 @@ export default class RecordedSearchMenu extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === true && oldState === false) {
+        if (newState && !oldState) {
             this.searchState.initValues();
             this.isNoRule = false;
 

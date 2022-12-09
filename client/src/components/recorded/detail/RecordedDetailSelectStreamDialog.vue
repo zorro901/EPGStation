@@ -35,8 +35,7 @@ import container from '@/model/ModelContainer';
 import IRecordedDetailSelectStreamState from '@/model/state/recorded/detail/IRecordedDetailSelectStreamState';
 import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
 import Util from '@/util/Util';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import * as apid from '../../../../../api';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 @Component({})
 export default class RecordedDetailSelectStreamDialog extends Vue {
@@ -100,7 +99,7 @@ export default class RecordedDetailSelectStreamDialog extends Vue {
      */
     @Watch('dialogState.isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

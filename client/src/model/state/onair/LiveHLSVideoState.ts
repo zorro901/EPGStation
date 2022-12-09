@@ -64,7 +64,7 @@ class LiveHLSVideoState implements ILiveHLSVideoState {
         const info = await this.streamApiModel.getStreamInfo(true);
 
         for (const item of info.items) {
-            if (item.streamId === this.streamId && item.isEnable === true) {
+            if (item.streamId === this.streamId && item.isEnable) {
                 return true;
             }
         }

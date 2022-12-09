@@ -115,13 +115,13 @@ export default class EncodeState implements IEncodeState {
 
         let selectedCnt = 0;
         for (const r of this.encodeInfo.runningItems) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 selectedCnt++;
             }
         }
 
         for (const r of this.encodeInfo.waitItems) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 selectedCnt++;
             }
         }
@@ -165,20 +165,20 @@ export default class EncodeState implements IEncodeState {
 
         let isUnselectAll = true;
         for (const r of this.encodeInfo.runningItems) {
-            if (r.isSelected === false) {
+            if (!r.isSelected) {
                 isUnselectAll = false;
             }
             r.isSelected = true;
         }
         for (const r of this.encodeInfo.waitItems) {
-            if (r.isSelected === false) {
+            if (!r.isSelected) {
                 isUnselectAll = false;
             }
             r.isSelected = true;
         }
 
         // 全て選択済みであれば選択を解除する
-        if (isUnselectAll === true) {
+        if (isUnselectAll) {
             for (const r of this.encodeInfo.runningItems) {
                 r.isSelected = false;
             }
@@ -216,12 +216,12 @@ export default class EncodeState implements IEncodeState {
         // 削除する video file を列挙する
         const reserveIds: apid.ReserveId[] = [];
         for (const r of this.encodeInfo.runningItems) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 reserveIds.push(r.encodeItem.id);
             }
         }
         for (const r of this.encodeInfo.waitItems) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 reserveIds.push(r.encodeItem.id);
             }
         }
@@ -240,7 +240,7 @@ export default class EncodeState implements IEncodeState {
             }
         }
 
-        if (hasError === true) {
+        if (hasError) {
             throw new Error();
         }
     }

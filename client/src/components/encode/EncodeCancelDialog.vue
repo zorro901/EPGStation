@@ -47,7 +47,7 @@ export default class EncodeCancelDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

@@ -10,7 +10,7 @@ import IB24RenderState from '@/model/state/recorded/streaming/IB24RenderState';
 import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
 import HLSUtil from '@/util/HLSUtil';
 import Hls from 'hls.js';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import * as apid from '../../../../api';
 
 @Component({})
@@ -29,7 +29,7 @@ export default class LiveHLSVideo extends BaseVideo {
 
     public async mounted(): Promise<void> {
         // HLS stream 開始
-        await this.videoState.start(this.channelId, this.mode).catch(err => {
+        await this.videoState.start(this.channelId, this.mode).catch(() => {
             this.snackbarState.open({
                 color: 'error',
                 text: 'ストリーム開始に失敗',
@@ -38,7 +38,7 @@ export default class LiveHLSVideo extends BaseVideo {
 
         // ストリームが有効になるまで待つ
         this.checkEnabledTimerId = setInterval(async () => {
-            if ((await this.videoState.isEnabled()) === false) {
+            if (!(await this.videoState.isEnabled())) {
                 return;
             }
 
@@ -52,7 +52,7 @@ export default class LiveHLSVideo extends BaseVideo {
 
         this.destoryHls();
 
-        await this.videoState.stop().catch(err => {
+        await this.videoState.stop().catch(() => {
             this.snackbarState.open({
                 color: 'error',
                 text: 'ストリーム停止に失敗',
@@ -78,7 +78,7 @@ export default class LiveHLSVideo extends BaseVideo {
         }
 
         const videoSrc = `./streamfiles/stream${streamId}.m3u8`;
-        if (HLSUtil.isSupportedHLSjs() === false) {
+        if (!HLSUtil.isSupportedHLSjs()) {
             // hls.js 非対応
             this.setSrc(videoSrc);
             this.load();
@@ -90,7 +90,7 @@ export default class LiveHLSVideo extends BaseVideo {
             this.hls.attachMedia(this.video);
             this.hls.on(Hls.Events.MANIFEST_PARSED, async () => {
                 if (this.video !== null) {
-                    await this.video.play().catch(err => {});
+                    await this.video.play().catch(() => {});
                 }
             });
             this.b24RenderState.init(this.video, this.hls);
@@ -116,7 +116,7 @@ export default class LiveHLSVideo extends BaseVideo {
      * @return boolean true で有効
      */
     public isEnabledSubtitles(): boolean {
-        return this.b24RenderState.isInited() !== true ? true : super.isEnabledSubtitles();
+        return !this.b24RenderState.isInited() ? true : super.isEnabledSubtitles();
     }
 
     /**

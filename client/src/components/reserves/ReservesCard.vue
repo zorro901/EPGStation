@@ -62,21 +62,21 @@ export default class ReservesCard extends Vue {
     public getClass(reserve: ReserveStateData): any {
         const result: any = {};
 
-        if (!!this.flat === false) {
+        if (!this.flat) {
             result['my-3'] = true;
         }
 
-        if (reserve.reserveItem.isSkip === true) {
+        if (reserve.reserveItem.isSkip) {
             result.skip = true;
-        } else if (reserve.reserveItem.isConflict === true) {
+        } else if (reserve.reserveItem.isConflict) {
             result.conflict = true;
-        } else if (reserve.reserveItem.isOverlap === true) {
+        } else if (reserve.reserveItem.isOverlap) {
             result.overlap = true;
         } else {
             result.reserve = true;
         }
 
-        if (reserve.isSelected === true) {
+        if (reserve.isSelected) {
             result['selected-color'] = true;
         }
 
@@ -84,7 +84,7 @@ export default class ReservesCard extends Vue {
     }
 
     public clickItem(reserve: ReserveStateData): void {
-        if (this.isEditMode === true) {
+        if (this.isEditMode) {
             this.$emit('selected', reserve.reserveItem.id);
 
             return;

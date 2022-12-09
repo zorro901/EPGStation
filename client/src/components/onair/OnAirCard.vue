@@ -4,7 +4,7 @@
             <div v-for="item in items" v-bind:key="item.display.channelId" v-on:click="openStreamSelector(item.schedule.channel)">
                 <div class="py-2" style="cursor: pointer">
                     <div v-if="typeof item.display.logoSrc !== 'undefined'" v-on:click="openGuideProgramDialog(item.schedule, $event)" class="d-flex align-center mb-1">
-                        <img :src="item.display.logoSrc" height="24" class="pr-2" />
+                        <img :src="item.display.logoSrc" height="24" class="pr-2" alt="logo" />
                         <div class="pt-1 subtitle-1 font-weight-black">{{ item.display.channelName }}</div>
                     </div>
                     <div v-else v-on:click="openGuideProgramDialog(item.schedule, $event)" class="mb-1 subtitle-1 font-weight-black">

@@ -41,7 +41,7 @@ export default class Pagination extends Vue {
     /**
      * pagination page
      */
-    set page(value: number) {}
+    set page(_: number) {}
 
     get totalPages(): number {
         if (this.total === 0) {

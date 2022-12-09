@@ -12,7 +12,6 @@
 <script lang="ts">
 import Util from '@/util/Util';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import * as apid from '../../../../../api';
 
 @Component({})
 export default class RecordedUploadingDialog extends Vue {
@@ -34,7 +33,7 @@ export default class RecordedUploadingDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

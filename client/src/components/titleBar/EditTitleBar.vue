@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import container from '@/model/ModelContainer';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import INavigationState from '../../model/state/navigation/INavigationState';
 
 @Component({})
@@ -28,14 +28,6 @@ export default class EditTitleBar extends Vue {
     public isEditMode!: boolean;
 
     public navigationState: INavigationState = container.get<INavigationState>('INavigationState');
-
-    /**
-     * Prop で受け取った isEditMode は直接書き換えられないので
-     * getter, setter を用意する
-     */
-    get editMode(): boolean {
-        return this.isEditMode;
-    }
     set editMode(value: boolean) {
         this.$emit('update:isEditMode', value);
     }
@@ -44,7 +36,7 @@ export default class EditTitleBar extends Vue {
      * title bar の色を返す
      */
     get appBarColor(): string | null {
-        return this.$vuetify.theme.dark === true ? null : 'white';
+        return this.$vuetify.theme.dark ? null : 'white';
     }
 
     /**

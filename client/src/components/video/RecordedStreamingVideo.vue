@@ -7,7 +7,7 @@ import BaseVideo from '@/components/video/BaseVideo';
 import container from '@/model/ModelContainer';
 import ISocketIOModel from '@/model/socketio/ISocketIOModel';
 import IRecordedStreamingVideoState from '@/model/state/recorded/streaming/IRecordedStreamingVideoState';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import * as apid from '../../../../api';
 
 interface VideoSrcInfo {
@@ -55,12 +55,12 @@ export default class RecordedStreamingVideo extends BaseVideo {
         super.mounted();
 
         // 録画中の場合は duration が変化するので定期的に timeupdate を発行する
-        if (this.videoState.isRecording() === true) {
+        if (this.videoState.isRecording()) {
             this.updateDurationTimerId = setInterval(() => {
                 this.onTimeupdate();
 
                 // 録画中でなくなったらタイマーを止める
-                if (this.videoState.isRecording() === false) {
+                if (!this.videoState.isRecording()) {
                     clearInterval(this.updateDurationTimerId);
                 }
             }, 1000);
@@ -73,7 +73,7 @@ export default class RecordedStreamingVideo extends BaseVideo {
      */
     private async updateVideoInfo(): Promise<void> {
         await this.videoState.fetchInfo(this.recordedId, this.videoFileId);
-        if (this.videoState.isRecording() === false) {
+        if (!this.videoState.isRecording()) {
             clearInterval(this.updateDurationTimerId);
         }
     }
@@ -175,10 +175,10 @@ export default class RecordedStreamingVideo extends BaseVideo {
             this.load();
 
             this.video.playbackRate = playbackRate;
-            if (this.pauseStateBeforeCurrentTime === true) {
+            if (this.pauseStateBeforeCurrentTime) {
                 this.pause();
             } else {
-                await this.play().catch(err => {
+                await this.play().catch(() => {
                     // console.error(err);
                 });
             }

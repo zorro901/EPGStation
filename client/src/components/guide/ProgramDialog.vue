@@ -285,7 +285,7 @@ export default class ProgramDialog extends Vue {
          * android 使用時に番組表のスクロールが正常にできなくなる
          * そのため一時的に isRemove を true にして要素を削除し、再度描画させている
          */
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.dialogSetting.save();
 
@@ -297,7 +297,7 @@ export default class ProgramDialog extends Vue {
                     this.dialogState.close();
                 });
             });
-        } else if (newState === true && oldState === false) {
+        } else if (newState && !oldState) {
             // open
             // extended の URL のリンクを貼る
             this.$nextTick(() => {

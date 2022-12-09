@@ -155,7 +155,7 @@ export default class ManualReserve extends Vue {
      */
     private savePageInfo(): void {
         // 編集の場合は何もしない
-        if (this.isEditMode === true) {
+        if (this.isEditMode) {
             return;
         }
 

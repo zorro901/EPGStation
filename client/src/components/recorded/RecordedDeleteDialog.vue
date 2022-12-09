@@ -79,9 +79,9 @@ export default class RecordedDeleteDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === true && !!oldState === false) {
+        if (newState && !oldState) {
             this.init();
-        } else if (newState === false && oldState === true) {
+        } else if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);
@@ -101,8 +101,8 @@ export default class RecordedDeleteDialog extends Vue {
         this.dialogModel = false;
 
         // 削除対象が0件の場合は早期リターンをする
-        let isNoDelete = false;
-        isNoDelete = this.videoFiles.every(v => v.isDelete === false);
+        let isNoDelete: boolean;
+        isNoDelete = this.videoFiles.every(v => !v.isDelete);
         if (isNoDelete) {
             return;
         }
@@ -136,14 +136,14 @@ export default class RecordedDeleteDialog extends Vue {
     private async delete(): Promise<boolean> {
         let isAllDelete = true;
         for (const v of this.videoFiles) {
-            if (v.isDelete === false) {
+            if (!v.isDelete) {
                 isAllDelete = false;
                 break;
             }
         }
 
         // 全件削除
-        if (isAllDelete === true) {
+        if (isAllDelete) {
             await this.recordedApiModel.delete(this.recordedItem.id);
 
             return true;
@@ -152,7 +152,7 @@ export default class RecordedDeleteDialog extends Vue {
         // 個別削除
         let isError = false;
         for (const v of this.videoFiles) {
-            if (v.isDelete === true) {
+            if (v.isDelete) {
                 await this.videApiModel.delete(v.id).catch(err => {
                     console.error(`delete video failed: ${v.id}`);
                     console.error(err);
@@ -161,7 +161,7 @@ export default class RecordedDeleteDialog extends Vue {
             }
         }
 
-        if (isError !== false) {
+        if (isError) {
             throw new Error('DeleteVideoFailed');
         }
 

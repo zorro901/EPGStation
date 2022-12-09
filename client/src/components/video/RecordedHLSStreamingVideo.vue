@@ -12,15 +12,8 @@ import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
 import HLSUtil from '@/util/HLSUtil';
 import Util from '@/util/Util';
 import Hls from 'hls.js';
-import { Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop } from 'vue-property-decorator';
 import * as apid from '../../../../api';
-
-interface VideoSrcInfo {
-    videoFileId: apid.VideoFileId;
-    mode: number;
-    playPosition: number;
-}
-
 @Component({})
 export default class RecordedHLSStreamingVideo extends BaseVideo {
     @Prop({ required: true })
@@ -59,19 +52,19 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
             await this.updateVideoInfo();
 
             // 録画中の場合は duration が変化するので定期的に timeupdate を発行する
-            if (this.videoState.isRecording() === true) {
+            if (this.videoState.isRecording()) {
                 this.updateDurationTimerId = setInterval(() => {
                     this.onTimeupdate();
 
                     // 録画中でなくなったらタイマーを止める
-                    if (this.videoState.isRecording() === false) {
+                    if (!this.videoState.isRecording()) {
                         clearInterval(this.updateDurationTimerId);
                     }
                 }, 1000);
             }
 
             // HLS stream 開始
-            await this.videoState.start(this.videoFileId, this.basePlayPosition, this.mode).catch(err => {
+            await this.videoState.start(this.videoFileId, this.basePlayPosition, this.mode).catch(() => {
                 this.snackbarState.open({
                     color: 'error',
                     text: 'ストリーム開始に失敗',
@@ -89,14 +82,14 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
      * @return Promise<void>
      */
     private waitForEnabled(): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>(resolve => {
             if (this.videoState.getStreamId() === null) {
                 return;
             }
 
             // ストリームが有効になるまで待つ
             const checkEnabledTimerId = setInterval(async () => {
-                if ((await this.videoState.isEnabled()) === false) {
+                if (!(await this.videoState.isEnabled())) {
                     return;
                 }
 
@@ -112,7 +105,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
      */
     private async updateVideoInfo(): Promise<void> {
         await this.videoState.fetchInfo(this.recordedId, this.videoFileId);
-        if (this.videoState.isRecording() === false) {
+        if (!this.videoState.isRecording()) {
             clearInterval(this.updateDurationTimerId);
         }
     }
@@ -125,7 +118,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
 
         this.destoryHls();
 
-        await this.videoState.stop().catch(err => {
+        await this.videoState.stop().catch(() => {
             this.snackbarState.open({
                 color: 'error',
                 text: 'ストリーム停止に失敗',
@@ -165,7 +158,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
         }
 
         const videoSrc = `./streamfiles/stream${streamId}.m3u8`;
-        if (HLSUtil.isSupportedHLSjs() === false) {
+        if (!HLSUtil.isSupportedHLSjs()) {
             // hls.js 非対応
             this.setSrc(videoSrc);
             this.load();
@@ -176,7 +169,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
                     }
                     this.video.currentTime = 0;
                 })
-                .catch(async err => {
+                .catch(async () => {
                     if (this.video === null) {
                         return;
                     }
@@ -195,7 +188,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
                             return;
                         }
                         this.video.currentTime = 0;
-                        await this.video.play().catch(err => {});
+                        await this.video.play().catch(() => {});
                         this.video.currentTime = 0;
                     }, 100);
                 }
@@ -285,7 +278,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
                     return;
                 }
                 this.initVideoSetting();
-                if (needsShowSubtitle === true) {
+                if (needsShowSubtitle) {
                     this.showSubtitle();
                 }
             } catch (err) {
@@ -296,7 +289,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
                 return;
             }
 
-            if (HLSUtil.isSupportedHLSjs() === true) {
+            if (HLSUtil.isSupportedHLSjs()) {
                 this.video.currentTime = 0;
             }
             await Util.sleep(500);
@@ -310,7 +303,7 @@ export default class RecordedHLSStreamingVideo extends BaseVideo {
      * @return boolean true で有効
      */
     public isEnabledSubtitles(): boolean {
-        return this.b24RenderState.isInited() !== true ? true : super.isEnabledSubtitles();
+        return !this.b24RenderState.isInited() ? true : super.isEnabledSubtitles();
     }
 
     /**

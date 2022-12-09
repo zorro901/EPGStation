@@ -61,7 +61,7 @@ export default class RuleItems extends Vue {
      */
     public changeState(item: RuleStateData): void {
         try {
-            if (item.display.isEnable === true) {
+            if (item.display.isEnable) {
                 this.ruleApiModel.enable(item.display.id);
                 this.snackbarState.open({
                     color: 'success',

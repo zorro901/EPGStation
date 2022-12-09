@@ -19,8 +19,6 @@
 </template>
 
 <script lang="ts">
-import container from '@/model/ModelContainer';
-import IRecordedUtil from '@/model/state/recorded/IRecordedUtil';
 import Util from '@/util/Util';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import * as apid from '../../../../api';
@@ -39,9 +37,6 @@ export default class RecordedDownloadDialog extends Vue {
     public isOpen!: boolean;
 
     public isRemove: boolean = false;
-
-    private recordedUtil: IRecordedUtil = container.get<IRecordedUtil>('IRecordedUtil');
-
     get videoFiles(): DwonloadVideoFileInfo[] {
         return typeof this.recordedItem.videoFiles === 'undefined'
             ? []
@@ -66,7 +61,7 @@ export default class RecordedDownloadDialog extends Vue {
 
     @Watch('isOpen', { immediate: true })
     public onChangeState(newState: boolean, oldState: boolean): void {
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);

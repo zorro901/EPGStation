@@ -63,7 +63,7 @@ export default class RecordedSmallCard extends Vue {
     public isShowDropInfo!: boolean;
 
     public gotoDetail(): void {
-        if (this.isEditMode === true) {
+        if (this.isEditMode) {
             this.$emit('selected', this.item.recordedItem.id);
 
             return;

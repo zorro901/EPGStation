@@ -131,7 +131,7 @@ export default class RuleState implements IRuleState {
 
         let selectedCnt = 0;
         for (const r of this.rules) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 selectedCnt++;
             }
         }
@@ -206,7 +206,7 @@ export default class RuleState implements IRuleState {
         // 削除する video file を列挙する
         const reserveIds: apid.ReserveId[] = [];
         for (const r of this.rules) {
-            if (r.isSelected === true) {
+            if (r.isSelected) {
                 reserveIds.push(r.item.id);
             }
         }

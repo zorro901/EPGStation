@@ -79,7 +79,7 @@ export default class ReserveDialog extends Vue {
         };
 
         const setting = this.settingModel.getSavedValue();
-        if (setting.isEnableDisplayForEachBroadcastWave === true) {
+        if (setting.isEnableDisplayForEachBroadcastWave) {
             const channel = this.channelModel.findChannel(this.reserve.reserveItem.channelId, true);
             if (channel !== null) {
                 query.type = channel.channelType;
@@ -102,7 +102,7 @@ export default class ReserveDialog extends Vue {
          * android 使用時に番組表のスクロールが正常にできなくなる
          * そのため一時的に isRemove を true にして要素を削除し、再度描画させている
          */
-        if (newState === false && oldState === true) {
+        if (!newState && oldState) {
             // close
             this.$nextTick(async () => {
                 await Util.sleep(100);
@@ -111,7 +111,7 @@ export default class ReserveDialog extends Vue {
                     this.isRemove = false;
                 });
             });
-        } else if (newState === true && oldState === false) {
+        } else if (newState && !oldState) {
             // open
             // extended の URL のリンクを貼る
             this.$nextTick(() => {

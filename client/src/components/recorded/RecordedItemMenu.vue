@@ -109,7 +109,7 @@ export default class RecordedItemMenu extends Vue {
         }
 
         await Util.sleep(300);
-        Util.move(this.$router, {
+        await Util.move(this.$router, {
             path: '/search',
             query: {
                 rule: this.recordedItem.ruleId.toString(10),
@@ -121,7 +121,7 @@ export default class RecordedItemMenu extends Vue {
         await Util.sleep(300);
 
         if (typeof this.recordedItem.ruleId !== 'undefined') {
-            Util.move(this.$router, {
+            await Util.move(this.$router, {
                 path: '/recorded',
                 query: {
                     ruleId: this.recordedItem.ruleId.toString(10),
@@ -132,7 +132,7 @@ export default class RecordedItemMenu extends Vue {
         }
 
         // recorded 絞り込み
-        Util.move(this.$router, {
+        await Util.move(this.$router, {
             path: '/recorded',
             query: {
                 keyword: StrUtil.createSearchKeyword(this.recordedItem.name),

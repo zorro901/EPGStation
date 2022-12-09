@@ -18,7 +18,7 @@
 <script lang="ts">
 import container from '@/model/ModelContainer';
 import ISnackbarState from '@/model/state/snackbar/ISnackbarState';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component({})
 export default class Snackbar extends Vue {
@@ -30,11 +30,6 @@ export default class Snackbar extends Vue {
 
         return result;
     }
-
-    public async onClickButton(): Promise<void> {
-        this.snackbarState.isOpen = false;
-    }
-
     public onClose(): void {
         this.snackbarState.close();
     }

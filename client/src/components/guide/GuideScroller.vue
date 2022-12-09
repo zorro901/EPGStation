@@ -54,7 +54,7 @@ export default class GuideScroller extends Vue {
     }
 
     public onMousemove(e: MouseEvent): void {
-        if (this.isPushed === false) {
+        if (!this.isPushed) {
             return;
         }
 

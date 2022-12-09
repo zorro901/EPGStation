@@ -16,7 +16,6 @@
 import Util from '@/util/Util';
 import { cloneDeep } from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Route } from 'vue-router';
 
 @Component({})
 class MobilePagination extends Vue {
@@ -44,7 +43,7 @@ class MobilePagination extends Vue {
     }
 
     get color(): string {
-        return this.$vuetify.theme.dark === true ? '' : 'white';
+        return this.$vuetify.theme.dark ? '' : 'white';
     }
 
     @Watch('$route', { immediate: true, deep: true })
