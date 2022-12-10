@@ -145,7 +145,7 @@ const cleanup = async () => {
  */
 const runEPGUpdater = async () => {
     const epgUpdateExecutorManageModel = container.get<IEPGUpdateExecutorManageModel>('IEPGUpdateExecutorManageModel');
-    epgUpdateExecutorManageModel.execute();
+    await epgUpdateExecutorManageModel.execute();
 };
 
 (async () => {

@@ -114,10 +114,10 @@ export default class RecordedDetailMoreButton extends Vue {
 
         await Util.sleep(300);
         await Util.move(this.$router, {
-          path: '/search',
-          query: {
-            rule: this.recordedItem.ruleId.toString(10),
-          },
+            path: '/search',
+            query: {
+                rule: this.recordedItem.ruleId.toString(10),
+            },
         });
     }
 
@@ -156,19 +156,19 @@ export default class RecordedDetailMoreButton extends Vue {
 
         if (typeof this.recordedItem.ruleId !== 'undefined') {
             await Util.move(this.$router, {
-              path: '/recorded',
-              query: {
-                ruleId: this.recordedItem.ruleId.toString(10),
-              },
+                path: '/recorded',
+                query: {
+                    ruleId: this.recordedItem.ruleId.toString(10),
+                },
             });
         }
 
         // recorded 絞り込み
         await Util.move(this.$router, {
-          path: '/recorded',
-          query: {
-            keyword: StrUtil.createSearchKeyword(this.recordedItem.name),
-          },
+            path: '/recorded',
+            query: {
+                keyword: StrUtil.createSearchKeyword(this.recordedItem.name),
+            },
         });
     }
 
